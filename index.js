@@ -2,6 +2,8 @@
 // import necessary functions
 import { sentences } from "./sentences.js"
 import { randomSentenceGenerator } from "./utils.js"
+import { wpmCalculator } from "./utils.js"
+import { accuracyCalculator } from "./utils.js"
 
 // Game state variables
 let typed = "";
@@ -70,7 +72,16 @@ function handleKey(data) {
 }
 
 function finish() {
-  console.log("\n Errors:", errors)
+  const endTime = Date.now()
+  const totalTime = (endTime - startTime) / 1000;
+  // log the total time taken
+  console.log("\n Total Time: " + totalTime + "s");
+  // log the wpm
+  console.log("WPM: " + Math.round(wpmCalculator(answer.length, totalTime)));
+  // log the accuracy and number of errors
+  console.log("Accuracy: " + accuracyCalculator(totalKeypresses, errors) + "%");
+  // console.log("\n Errors:", errors);
+  // console.log("\n" + totalKeypresses);
   process.exit();
 }
 
@@ -81,6 +92,3 @@ function render() {
 
 }
 
-// refresh self on new concepts
-// strengthen understanding of logic
-// complete success check for phase 3
