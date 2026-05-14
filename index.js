@@ -16,9 +16,14 @@ import { randomSentenceGenerator, wpmCalculator, accuracyCalculator } from "./ut
 
 
 // Game state variables
+
+// tracks user input for live comparison against target sentence
 let typed = "";
+// counts incorrect inputs for accuracy calculation
 let errors = 0;
+// total number of keypresses for accuracy calculation
 let totalKeypresses = 0;
+// timestamp of the first valid keypress
 let startTime = null;
 
 // Game Intro
@@ -30,21 +35,20 @@ let answer = randomSentenceGenerator(sentences);
 process.stdout.write(answer + "\n");
 
 
-// enable standard input in terminal
+// enable raw keyboard input in terminal - does not require Enter key
 process.stdin.setRawMode(true); 
-// enable input events
+// keep stdin active for continuous key event streaming
 process.stdin.resume(); 
-// translate binary into readable text
+// convert buffer input into readable string characters
 process.stdin.setEncoding("utf8"); 
 
 
-// data listener
+// routes every keypress into central game input handler
 process.stdin.on("data", handleKey);
 
 // handleKey function to update game state
-
 function handleKey(data) {
-  // exit the program when CTRL + C are pressed
+  // allow for safe exit from program when CTRL + C are pressed
   if (data === "\u0003") {
     // turn off raw mode and pause standard input
     process.stdin.setRawMode(false);
@@ -54,19 +58,19 @@ function handleKey(data) {
   }
   // ignores keypresses that are arrows and function keys
   if (data.startsWith("\x1b")) return;
-  // start timer when valid data is inputted
+  // start timing on the user's first real input
   if (startTime === null) {
     startTime = Date.now();
   }
-   // modify typed variable when backspace key is pressed
+   // handles user correction by removing the last typed character
   if (data === "\u007f") {
     typed = typed.slice(0, -1);
     render();
     return;
   }
-  // find the next character
+  // determines expected character based on current typing position
   const expected = answer[typed.length];
-  // compare expected with data
+  // validates user input against target sentence
   if (data === expected) {
     typed += data;
   } else {
@@ -74,7 +78,7 @@ function handleKey(data) {
   }
   totalKeypresses += 1;
 
-  // if user gets answer correct, end the game
+  // check for completion condition and trigger finish function
   render();
   if (typed === answer) {
     finish();
@@ -82,23 +86,20 @@ function handleKey(data) {
 }
 
 function finish() {
+  // compute and display final session stats(total time, wpm, accuracy, errors), then restore terminal state
   const endTime = Date.now()
   const totalTime = (endTime - startTime) / 1000;
-  // log the total time taken
   console.log("\n Total Time: " + totalTime + "s");
-  // log the wpm
   console.log(" WPM: " + Math.round(wpmCalculator(answer.length, totalTime)));
-  // log the accuracy and number of errors
   console.log(" Accuracy: " + Math.round(accuracyCalculator(totalKeypresses, errors)) + "%");
-  // turn off raw mode and pause standard input
   process.stdin.setRawMode(false);
   process.stdin.pause();
+  // safely exit the game after completion
   process.exit();
 }
 
 function render() {
-  // show text on the terminal using escape characters
-  // tracker for user input
+  // renders current typing state to terminal
   process.stdout.write("\r" + typed + "_");
  
 }
