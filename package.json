@@ -1,14 +1,13 @@
 {
   "name": "type-tastic",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A CLI speed typing game built with Node.js",
   "scripts": {
     "start": "node index.js",
     "dev": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Xavier Glover",
   "license": "ISC",
   "type": "module"
 }

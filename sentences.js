@@ -1,3 +1,11 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  TL;DR  -->  static typing prompt data
+
+      - exports sentence array used for game rounds
+      - contains data only (no logic or imports)
+      - prompts should remain short enough for terminal display
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 export const sentences = [
   "The cow jumped over the moon",
   "The chicken crossed the road",

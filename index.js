@@ -1,9 +1,19 @@
-// Hosts main game logic
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  TL;DR  -->  main game engine + runtime state
+
+      - initializes and runs the typing game
+      - enables raw stdin keyboard input
+      - tracks typed chars, errors, timing, and score
+      - processes every keypress through handleKey()
+      - redraws terminal output via render()
+      - calculates final stats and restores terminal on exit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+
 // import necessary functions
 import { sentences } from "./sentences.js"
-import { randomSentenceGenerator } from "./utils.js"
-import { wpmCalculator } from "./utils.js"
-import { accuracyCalculator } from "./utils.js"
+import { randomSentenceGenerator, wpmCalculator, accuracyCalculator } from "./utils.js"
+
 
 // Game state variables
 let typed = "";
@@ -27,10 +37,6 @@ process.stdin.resume();
 // translate binary into readable text
 process.stdin.setEncoding("utf8"); 
 
-// testing
-// process.stdin.on("data", (data) => {
-//   console.log("Got:", data);
-// })
 
 // data listener
 process.stdin.on("data", handleKey);
@@ -40,6 +46,9 @@ process.stdin.on("data", handleKey);
 function handleKey(data) {
   // exit the program when CTRL + C are pressed
   if (data === "\u0003") {
+    // turn off raw mode and pause standard input
+    process.stdin.setRawMode(false);
+    process.stdin.pause();
     process.exit();
     return
   }
@@ -52,6 +61,7 @@ function handleKey(data) {
    // modify typed variable when backspace key is pressed
   if (data === "\u007f") {
     typed = typed.slice(0, -1);
+    render();
     return;
   }
   // find the next character
@@ -77,18 +87,19 @@ function finish() {
   // log the total time taken
   console.log("\n Total Time: " + totalTime + "s");
   // log the wpm
-  console.log("WPM: " + Math.round(wpmCalculator(answer.length, totalTime)));
+  console.log(" WPM: " + Math.round(wpmCalculator(answer.length, totalTime)));
   // log the accuracy and number of errors
-  console.log("Accuracy: " + accuracyCalculator(totalKeypresses, errors) + "%");
-  // console.log("\n Errors:", errors);
-  // console.log("\n" + totalKeypresses);
+  console.log(" Accuracy: " + Math.round(accuracyCalculator(totalKeypresses, errors)) + "%");
+  // turn off raw mode and pause standard input
+  process.stdin.setRawMode(false);
+  process.stdin.pause();
   process.exit();
 }
 
 function render() {
   // show text on the terminal using escape characters
   // tracker for user input
-  process.stdout.write("\r" + typed + "_")
-
+  process.stdout.write("\r" + typed + "_");
+ 
 }
 
