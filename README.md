@@ -8,11 +8,11 @@ Type-Tastic is a CLI speed typing game built with Node.js. You will receive a se
 
 ## **Gameplay:**
 
+![alt text](/assets/image-1.png)
+
+![alt text](/assets/image-2.png)
+
 ![alt text](/assets/image-3.png)
-
-![alt text](/assets/image-4.png)
-
-![alt text](/assets/image-5.png)
 
 ## **Scoring:**
 
