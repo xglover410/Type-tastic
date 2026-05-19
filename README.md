@@ -42,11 +42,24 @@ Accuracy = ((((totalKeypresses - errors) / totalKeypresses) * 100))
 
 ## **How to run this program:**
 
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/xglover410/Type-tastic.git
+```
+
+### 2. Move into the Project Directory
+
+```bash
+cd type-tastic
+```
+
+### 3. Run the Program
+
 ```bash
 node index.js
 
 ```
-
 
 ## **How to exit this program:**
 
